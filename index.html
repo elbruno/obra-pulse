@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ObraPulse — AI Construction Command Center</title>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="presenter.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
 </head>
 <body>
@@ -20,10 +21,12 @@
 
     <div class="header-meta">
       <span class="header-badge">Datos de demostración · AI Construction Summit 2026</span>
-      <span class="header-updated">Última actualización: hace 4 min</span>
+      <span class="header-updated" id="data-updated-stamp">Última actualización: hace un momento</span>
     </div>
 
     <div class="header-controls">
+      <button id="tour-start-btn" aria-label="Iniciar modo presentación">▶ Modo presentación</button>
+      <button id="refresh-data-btn" aria-label="Refrescar datos">🔄 Refrescar</button>
       <button id="theme-toggle" class="btn-icon" aria-label="Cambiar tema">🌙</button>
       <input
         id="search-input"
@@ -188,5 +191,30 @@
   </footer>
 
   <script src="app.js" defer></script>
+  <script src="presenter.js" defer></script>
+
+  <!-- =========================================================
+       TOUR LAYER (hidden until Presenter Mode activates)
+  ========================================================== -->
+  <div id="tour-overlay" aria-hidden="true"></div>
+
+  <div id="tour-caption-bar" role="region" aria-label="Presenter caption" aria-live="polite">
+    <div id="tour-progress" role="group" aria-label="Tour progress">
+      <!-- dots injected by presenter.js -->
+    </div>
+    <span id="tour-caption-text"></span>
+    <div id="tour-controls">
+      <button class="tour-btn" id="tour-prev-btn" aria-label="Paso anterior">←</button>
+      <button class="tour-btn" id="tour-next-btn" aria-label="Siguiente paso">→</button>
+      <button class="tour-btn" id="tour-exit-btn" aria-label="Salir del recorrido">✕</button>
+    </div>
+  </div>
+
+  <div id="tour-speaker-notes" role="complementary" aria-label="Notas del orador">
+    <span class="notes-label">🎙 Notas del orador</span>
+    <p id="tour-notes-text"></p>
+  </div>
+
+  <div id="tour-timer" aria-live="off" aria-label="Temporizador">00:00</div>
 </body>
 </html>

@@ -42,6 +42,7 @@ let charts = {};
 fetch('./data.json')
   .then(r => r.json())
   .then(data => {
+    window.obraPulseData = data;
     allProyectos = data.proyectos;
     renderKPIs();
     renderRecommendations(data.recomendaciones);
@@ -51,6 +52,7 @@ fetch('./data.json')
     initSearch();
     initSort();
     initCharts(data);
+    initUpdatedStamp();
   })
   .catch(err => console.error('[ObraPulse] Error loading data.json:', err));
 
@@ -396,3 +398,129 @@ function updateChartTheme() {
     chart.update();
   });
 }
+
+// ─────────────────────────────────────────────
+// PRESENTER MODE HOOKS
+// ─────────────────────────────────────────────
+
+// Re-render all dashboard sections from a data object
+window.rerenderDashboard = function (data) {
+  if (!data) return;
+  window.obraPulseData = data;
+  allProyectos = data.proyectos;
+  renderKPIs();
+  renderRecommendations(data.recomendaciones);
+  renderAlerts(data.alertas);
+  renderTable(allProyectos);
+  initFilters(data.proyectos);
+
+  if (charts.rfi) {
+    charts.rfi.data.labels = data.rfiActividad.labels;
+    charts.rfi.data.datasets[0].data = data.rfiActividad.abiertos;
+    charts.rfi.data.datasets[1].data = data.rfiActividad.cerrados;
+    charts.rfi.update();
+  }
+  if (charts.movers) {
+    const movers = [...data.topMovers].reverse();
+    charts.movers.data.labels = movers.map(m => m.proyecto);
+    charts.movers.data.datasets[0].data = movers.map(m => m.atrasoDias);
+    charts.movers.update();
+  }
+  updatePortfolioChart(data.proyectos);
+};
+
+// Lightly randomize KPI numbers and RFI activity (±10%) for demo refresh
+window.randomizeData = function () {
+  const data = window.obraPulseData;
+  if (!data) return null;
+
+  function jitter(n, pct = 0.1) {
+    const delta = Math.round(n * pct);
+    return Math.max(0, n + Math.floor(Math.random() * (delta * 2 + 1)) - delta);
+  }
+
+  const fresh = JSON.parse(JSON.stringify(data));
+  fresh.proyectos.forEach(p => {
+    p.rfis          = jitter(p.rfis, 0.12);
+    p.ordenesCambio = jitter(p.ordenesCambio, 0.15);
+    p.incidentesHSE = jitter(p.incidentesHSE, 0.2);
+    p.atrasoDias    = p.atrasoDias + Math.floor(Math.random() * 3) - 1;
+    p.avance        = Math.min(100, Math.max(0, p.avance + Math.floor(Math.random() * 3) - 1));
+  });
+  fresh.rfiActividad.abiertos = fresh.rfiActividad.abiertos.map(v => jitter(v, 0.15));
+  fresh.rfiActividad.cerrados = fresh.rfiActividad.cerrados.map(v => jitter(v, 0.15));
+
+  // Recompute KPI totals
+  const kpi = fresh.kpis;
+  kpi.rfisAbiertos   = fresh.proyectos.reduce((s, p) => s + p.rfis, 0);
+  kpi.incidentesHSE  = fresh.proyectos.reduce((s, p) => s + p.incidentesHSE, 0);
+  kpi.ordenesCambio  = fresh.proyectos.reduce((s, p) => s + p.ordenesCambio, 0);
+  kpi.proyectosRiesgo = fresh.proyectos.filter(p => p.estado === 'rojo').length;
+
+  return fresh;
+};
+
+// AI live effect hook — called by presenter.js on step 3
+window.triggerAILiveEffect = function () {
+  const list = document.getElementById('recommendations-list');
+  if (!list) return;
+
+  const items = list.querySelectorAll('.recommendation-item');
+  if (!items.length) return;
+
+  // Inject analyzing indicator if not present
+  let indicator = document.getElementById('ai-analyzing-indicator');
+  if (!indicator) {
+    indicator = document.createElement('div');
+    indicator.id = 'ai-analyzing-indicator';
+    indicator.innerHTML = '<span class="pulse-dot"></span><span>⏺ analizando portafolio…</span>';
+    list.insertBefore(indicator, list.firstChild);
+  }
+
+  // Hide items
+  items.forEach(el => {
+    el.classList.add('rec-item-hidden');
+    el.classList.remove('rec-item-reveal');
+  });
+
+  // Show analyzing indicator
+  indicator.style.display = 'flex';
+  requestAnimationFrame(() => indicator.classList.add('visible'));
+
+  // After 1s: hide indicator, reveal items staggered
+  setTimeout(() => {
+    indicator.classList.remove('visible');
+    setTimeout(() => {
+      indicator.style.display = 'none';
+      items.forEach((el, i) => {
+        setTimeout(() => {
+          el.classList.remove('rec-item-hidden');
+          el.classList.add('rec-item-reveal');
+        }, i * 200);
+      });
+    }, 300);
+  }, 1000);
+};
+
+// ─────────────────────────────────────────────
+// UPDATED STAMP
+// ─────────────────────────────────────────────
+function initUpdatedStamp() {
+  const stamp = document.getElementById('data-updated-stamp');
+  if (!stamp) return;
+  let minutesAgo = 0;
+  stamp.textContent = 'Actualizado: hace un momento';
+
+  setInterval(() => {
+    minutesAgo += 1;
+    stamp.textContent = minutesAgo === 1
+      ? 'Actualizado: hace 1 min'
+      : `Actualizado: hace ${minutesAgo} min`;
+  }, 60000);
+}
+
+window.resetUpdatedStamp = function () {
+  const stamp = document.getElementById('data-updated-stamp');
+  if (!stamp) return;
+  stamp.textContent = 'Actualizado: hace un momento';
+};
