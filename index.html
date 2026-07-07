@@ -6,6 +6,7 @@
   <title>ObraPulse — AI Construction Command Center</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="presenter.css" />
+  <link rel="stylesheet" href="chat.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
 </head>
 <body>
@@ -27,6 +28,7 @@
     <div class="header-controls">
       <button id="tour-start-btn" aria-label="Iniciar modo presentación">▶ Modo presentación</button>
       <button id="refresh-data-btn" aria-label="Refrescar datos">🔄 Refrescar</button>
+      <button id="ia-toggle-btn" aria-pressed="true" aria-label="Alternar Sin IA y Con IA">Con IA</button>
       <button id="theme-toggle" class="btn-icon" aria-label="Cambiar tema">🌙</button>
       <input
         id="search-input"
@@ -68,7 +70,7 @@
         <span class="kpi-trend kpi-trend--neutral"></span>
       </div>
 
-      <div class="kpi-card kpi-card--danger">
+      <div class="kpi-card kpi-card--danger" id="kpi-en-riesgo">
         <span class="kpi-value" data-target="3">0</span>
         <span class="kpi-label">Proyectos en riesgo</span>
         <span class="kpi-trend kpi-trend--down">▼ requieren atención</span>
@@ -80,11 +82,36 @@
     ========================================================== -->
     <section id="agent-recommendations" aria-label="Recomendaciones del agente">
       <div class="section-header">
-        <h2 class="section-title">🤖 Recomendaciones del agente</h2>
+        <h2 class="section-title">🤖 Recomendaciones del agente <span class="agent-online">● en línea</span></h2>
         <span class="section-badge section-badge--ai">AI powered</span>
       </div>
-      <div id="recommendations-list" class="recommendations-list">
-        <!-- Populated by app.js -->
+      <div id="agent-ai-shell">
+        <div class="agent-switcher-note" id="ai-off-note">Datos por todos lados. ¿Por dónde empiezo?</div>
+
+        <div id="chat-panel" class="chat-panel" aria-label="Chat con ObraPulse">
+          <div class="chat-panel__header">
+            <div>
+              <h3>💬 Pregúntale a ObraPulse</h3>
+              <p>Consultá en lenguaje natural para priorizar decisiones.</p>
+            </div>
+            <span class="chat-panel__status">⏺ analizando…</span>
+          </div>
+
+          <div id="chat-history" class="chat-history" aria-live="polite"></div>
+
+          <div id="chat-suggestions" class="chat-suggestions" aria-label="Preguntas sugeridas"></div>
+
+          <form id="chat-form" class="chat-form">
+            <input id="chat-input" type="text" placeholder="Escribí una pregunta..." aria-label="Escribir pregunta" />
+            <button type="submit">Enviar</button>
+          </form>
+        </div>
+
+        <button id="draft-action-btn" class="draft-action-btn" type="button">Redacta un aviso para el equipo del Metro L3</button>
+
+        <div id="recommendations-list" class="recommendations-list">
+          <!-- Populated by app.js -->
+        </div>
       </div>
     </section>
 
@@ -187,11 +214,13 @@
   ========================================================== -->
   <footer id="main-footer">
     <p class="footer-credits">Demo construida con GitHub Copilot · Bruno Capuano · @elbruno</p>
+    <p class="footer-signature">Analizado por: Bruno + agente</p>
     <p class="footer-disclaimer">Datos ficticios con fines ilustrativos</p>
   </footer>
 
   <script src="app.js" defer></script>
   <script src="presenter.js" defer></script>
+  <script src="chat.js" defer></script>
 
   <!-- =========================================================
        TOUR LAYER (hidden until Presenter Mode activates)
@@ -216,5 +245,22 @@
   </div>
 
   <div id="tour-timer" aria-live="off" aria-label="Temporizador">00:00</div>
+
+  <div id="live-toast" class="live-toast" aria-live="assertive"></div>
+
+  <div id="draft-modal" class="draft-modal" aria-hidden="true">
+    <div class="draft-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="draft-modal-title">
+      <h3 id="draft-modal-title">Borrador de mensaje — Metro L3</h3>
+      <p class="draft-modal__meta"><strong>Para:</strong> Equipo Metro de Lima L3</p>
+      <p class="draft-modal__meta"><strong>Asunto:</strong> Priorización — RFIs y cronograma</p>
+      <textarea id="draft-modal-text" readonly></textarea>
+      <div class="draft-modal__actions">
+        <button type="button" data-draft-action="copy">Copiar</button>
+        <button type="button" data-draft-action="send">Enviar por correo</button>
+        <button type="button" data-draft-action="edit">Editar</button>
+        <button type="button" data-draft-action="close">Cerrar</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

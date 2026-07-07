@@ -44,6 +44,7 @@ fetch('./data.json')
   .then(data => {
     window.obraPulseData = data;
     allProyectos = data.proyectos;
+    syncKpiTargets(data.kpis);
     renderKPIs();
     renderRecommendations(data.recomendaciones);
     renderAlerts(data.alertas);
@@ -77,6 +78,23 @@ function renderKPIs() {
   });
 }
 
+function syncKpiTargets(kpis) {
+  if (!kpis) return;
+  const values = [
+    kpis.proyectosActivos,
+    kpis.rfisAbiertos,
+    kpis.ordenesCambio,
+    kpis.incidentesHSE,
+    kpis.proyectosRiesgo,
+  ];
+
+  document.querySelectorAll('.kpi-value[data-target]').forEach((el, index) => {
+    if (typeof values[index] !== 'undefined') {
+      el.setAttribute('data-target', String(values[index]));
+    }
+  });
+}
+
 // ─────────────────────────────────────────────
 // 4. AI RECOMMENDATIONS PANEL
 // ─────────────────────────────────────────────
@@ -84,8 +102,11 @@ function renderRecommendations(recomendaciones) {
   const list = document.getElementById('recommendations-list');
   list.innerHTML = recomendaciones.map(r => {
     const badge = r.prioridad === 'alta' ? '🔴' : '🟡';
+    const matchedProject = (window.obraPulseData?.proyectos || []).find(p =>
+      p.proyecto.toLowerCase().includes(r.proyecto.toLowerCase())
+    );
     return `
-      <div class="recommendation-item recommendation-item--${r.prioridad}">
+      <div class="recommendation-item recommendation-item--${r.prioridad}" data-project-id="${matchedProject ? matchedProject.id : ''}" role="button" tabindex="0">
         <span class="priority-badge priority-badge--${r.prioridad}">${badge}</span>
         <div class="rec-body">
           <p class="recommendation-text">${r.texto}</p>
@@ -140,7 +161,7 @@ function renderTable(proyectos) {
     const hseCls = p.incidentesHSE > 0 ? 'badge-danger' : '';
 
     return `
-      <tr>
+      <tr data-project-id="${p.id}" id="project-${p.id}">
         <td>
           <span class="project-name">${p.proyecto}</span>
           <span class="status-chip ${p.estado}">${estadoEmoji(p.estado)}</span>
@@ -408,6 +429,7 @@ window.rerenderDashboard = function (data) {
   if (!data) return;
   window.obraPulseData = data;
   allProyectos = data.proyectos;
+  syncKpiTargets(data.kpis);
   renderKPIs();
   renderRecommendations(data.recomendaciones);
   renderAlerts(data.alertas);
@@ -523,4 +545,57 @@ window.resetUpdatedStamp = function () {
   const stamp = document.getElementById('data-updated-stamp');
   if (!stamp) return;
   stamp.textContent = 'Actualizado: hace un momento';
+};
+
+window.clearDashboardHighlights = function () {
+  document.querySelectorAll('.dashboard-target-highlight').forEach(el => el.classList.remove('dashboard-target-highlight'));
+};
+
+window.highlightDashboardTarget = function (target) {
+  if (!target) return;
+  window.clearDashboardHighlights();
+
+  let el = null;
+  if (target.startsWith('row:')) {
+    const id = target.split(':')[1];
+    el = document.querySelector(`[data-project-id="${id}"]`);
+  } else if (target === 'kpi:enRiesgo') {
+    el = document.getElementById('kpi-en-riesgo');
+  } else if (target === 'panel:recomendaciones') {
+    el = document.getElementById('agent-recommendations');
+  } else if (target === 'panel:chat') {
+    el = document.getElementById('chat-panel');
+  }
+
+  if (el) {
+    el.classList.add('dashboard-target-highlight');
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => el.classList.remove('dashboard-target-highlight'), 1800);
+  }
+};
+
+window.triggerLiveAlert = function () {
+  const toast = document.getElementById('live-toast');
+  if (toast) {
+    toast.textContent = '⚠️ Nuevo RFI crítico en Metro de Lima L3';
+    toast.classList.add('visible');
+    setTimeout(() => toast.classList.remove('visible'), 2800);
+  }
+
+  window.adjustRfiKpi(1);
+};
+
+window.setRecommendationResolved = function (projectId) {
+  const item = document.querySelector(`.recommendation-item[data-project-id="${projectId}"]`);
+  if (item) item.classList.add('is-resolved');
+};
+
+window.adjustRfiKpi = function (delta) {
+  const kpi = document.querySelector('#kpis .kpi-card:nth-child(2) .kpi-value');
+  if (!kpi) return;
+  const next = Math.max(0, parseInt(kpi.textContent || '0', 10) + delta);
+  kpi.textContent = String(next);
+  if (window.obraPulseData?.kpis) {
+    window.obraPulseData.kpis.rfisAbiertos = next;
+  }
 };

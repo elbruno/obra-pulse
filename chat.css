@@ -1,0 +1,363 @@
+/* =============================================================
+   ObraPulse — chat.css
+   Chat / toggles / modal / live effects for v3
+   ============================================================= */
+
+#ia-toggle-btn {
+  background: transparent;
+  border: 1px solid var(--ai-accent);
+  color: var(--ai-accent);
+  border-radius: 999px;
+  padding: 0.45rem 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, color 0.2s, transform 0.1s;
+}
+
+#ia-toggle-btn[aria-pressed="false"] {
+  background: rgba(124, 58, 237, 0.12);
+}
+
+#ia-toggle-btn:active {
+  transform: scale(0.96);
+}
+
+#agent-ai-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.agent-online {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #22c55e;
+  font-size: 0.78rem;
+  margin-left: 0.45rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.agent-online::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  animation: onlinePulse 1.2s ease-in-out infinite;
+}
+
+@keyframes onlinePulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(0.75); opacity: 0.55; }
+}
+
+.agent-switcher-note {
+  display: none;
+  padding: 0.9rem 1rem;
+  border-radius: var(--border-radius-sm);
+  background: rgba(124, 58, 237, 0.08);
+  border: 1px dashed rgba(124, 58, 237, 0.3);
+  color: var(--text-secondary);
+}
+
+body.ai-off .agent-switcher-note {
+  display: block;
+}
+
+body.ai-off #chat-panel,
+body.ai-off #recommendations-list,
+body.ai-off #draft-action-btn {
+  display: none;
+}
+
+.chat-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 1px solid rgba(124, 58, 237, 0.18);
+  border-radius: var(--border-radius);
+  padding: 14px;
+  background: rgba(124, 58, 237, 0.05);
+}
+
+.chat-panel__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.chat-panel__header h3 {
+  color: var(--ai-accent);
+  font-size: 1.05rem;
+  margin-bottom: 0.2rem;
+}
+
+.chat-panel__header p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.chat-panel__status {
+  color: var(--ai-accent);
+  font-weight: 700;
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+
+.chat-history {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 180px;
+  max-height: 340px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.chat-message {
+  display: flex;
+  gap: 10px;
+  max-width: 92%;
+}
+
+.chat-message--user {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.chat-bubble {
+  border-radius: 18px;
+  padding: 10px 14px;
+  line-height: 1.5;
+  box-shadow: var(--shadow);
+}
+
+.chat-message--user .chat-bubble {
+  background: var(--accent);
+  color: #fff;
+}
+
+.chat-message--agent .chat-bubble {
+  background: rgba(124, 58, 237, 0.12);
+  color: var(--text-primary);
+  border: 1px solid rgba(124, 58, 237, 0.2);
+}
+
+.chat-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+  background: rgba(124, 58, 237, 0.18);
+  color: var(--ai-accent);
+}
+
+.chat-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chat-chip,
+.draft-action-btn,
+.draft-modal__actions button,
+.chat-form button {
+  border: 1px solid rgba(124, 58, 237, 0.25);
+  border-radius: 999px;
+  background: rgba(124, 58, 237, 0.08);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: transform 0.1s, background 0.2s, border-color 0.2s;
+}
+
+.chat-chip {
+  padding: 0.45rem 0.7rem;
+  font-size: 0.82rem;
+}
+
+.chat-chip:hover,
+.draft-action-btn:hover,
+.chat-form button:hover,
+.draft-modal__actions button:hover {
+  background: rgba(124, 58, 237, 0.16);
+}
+
+.chat-chip:active,
+.draft-action-btn:active,
+.chat-form button:active,
+.draft-modal__actions button:active {
+  transform: scale(0.97);
+}
+
+.chat-form {
+  display: flex;
+  gap: 10px;
+}
+
+.chat-form input {
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--card-bg);
+  color: var(--text-primary);
+  padding: 0.8rem 1rem;
+}
+
+.chat-form input:focus-visible,
+.chat-chip:focus-visible,
+.draft-action-btn:focus-visible,
+.draft-modal__actions button:focus-visible {
+  outline: 2px solid var(--ai-accent);
+  outline-offset: 2px;
+}
+
+.chat-form button {
+  padding: 0.8rem 1rem;
+}
+
+.draft-action-btn {
+  width: fit-content;
+  padding: 0.55rem 0.9rem;
+}
+
+.chat-message--typing .chat-bubble::after {
+  content: "▍";
+  margin-left: 0.15rem;
+  animation: blink 1s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+.dashboard-target-highlight {
+  outline: 2px solid var(--ai-accent) !important;
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15) !important;
+}
+
+.recommendation-item.is-resolved {
+  opacity: 0.6;
+  text-decoration: line-through;
+}
+
+.recommendation-item.is-resolved::after {
+  content: "✓ resuelta";
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: #22c55e;
+  font-weight: 700;
+}
+
+.recommendation-item[role="button"] {
+  cursor: pointer;
+}
+
+.live-toast {
+  position: fixed;
+  right: 1rem;
+  top: 1rem;
+  z-index: 3000;
+  min-width: 260px;
+  max-width: 360px;
+  padding: 0.85rem 1rem;
+  border-radius: var(--border-radius);
+  background: rgba(15, 23, 42, 0.96);
+  color: #fff;
+  box-shadow: var(--shadow-md);
+  transform: translateX(120%);
+  opacity: 0;
+  transition: transform 0.28s ease, opacity 0.28s ease;
+}
+
+.live-toast.visible {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.draft-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 4000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+  padding: 1rem;
+}
+
+.draft-modal.visible {
+  display: flex;
+}
+
+.draft-modal__dialog {
+  width: min(640px, 100%);
+  background: var(--card-bg);
+  color: var(--text-primary);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border);
+  padding: 1rem;
+  box-shadow: var(--shadow-md);
+}
+
+.draft-modal__dialog h3 {
+  margin-bottom: 0.4rem;
+}
+
+.draft-modal__meta {
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.draft-modal__dialog textarea {
+  width: 100%;
+  min-height: 150px;
+  margin: 0.75rem 0 1rem;
+  resize: vertical;
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius-sm);
+  background: var(--bg);
+  color: var(--text-primary);
+  padding: 0.85rem;
+  font: inherit;
+}
+
+.draft-modal__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.draft-modal__actions button {
+  padding: 0.55rem 0.85rem;
+}
+
+.footer-signature {
+  color: var(--ai-accent);
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .chat-panel__header,
+  .chat-form {
+    flex-direction: column;
+  }
+
+  .chat-message {
+    max-width: 100%;
+  }
+
+  .live-toast {
+    right: 0.75rem;
+    left: 0.75rem;
+    min-width: 0;
+  }
+}

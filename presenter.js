@@ -217,6 +217,9 @@
     // Trigger special effects
     if (step.specialEffect === 'ai-live' && typeof window.triggerAILiveEffect === 'function') {
       window.triggerAILiveEffect();
+      if (window.obraPulseChat?.send) {
+        setTimeout(() => window.obraPulseChat.send('¿Cuál es el proyecto con más riesgo?'), 900);
+      }
     }
   }
 
@@ -385,6 +388,11 @@
       case 'c':
         toggleTimer();
         break;
+
+      case 'A':
+      case 'a':
+        if (typeof window.triggerLiveAlert === 'function') window.triggerLiveAlert();
+        break;
     }
   }
 
@@ -398,6 +406,14 @@
       const stepNum = parseInt(match[1], 10);
       // Defer until app.js has rendered
       setTimeout(() => startTour(stepNum), 300);
+      return;
+    }
+
+    if (hash === '#tour' || hash === '#demo') {
+      setTimeout(() => {
+        startTour(1);
+        toggleFullscreen();
+      }, 300);
     }
   }
 
