@@ -24,9 +24,60 @@
 }
 
 #agent-ai-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.agent-column {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  min-width: 0;
+}
+
+.agent-card-shell {
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  background: linear-gradient(180deg, rgba(124, 58, 237, 0.08), rgba(124, 58, 237, 0.03));
+  border: 1px solid rgba(124, 58, 237, 0.16);
+  box-shadow: var(--shadow);
+}
+
+.agent-card-shell--soft {
+  background: rgba(124, 58, 237, 0.04);
+}
+
+.agent-card-shell__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 0.85rem;
+}
+
+.agent-card-shell__header h3 {
+  color: var(--ai-accent);
+  font-size: 0.98rem;
+}
+
+.agent-card-shell__header span {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+.alerts-list--compact {
+  gap: 8px;
+}
+
+.alerts-list--compact .alert-item {
+  padding: 10px 12px;
+  box-shadow: var(--shadow);
+}
+
+.alerts-list--compact .alert-text {
+  font-size: 0.92rem;
 }
 
 .agent-online {
@@ -79,8 +130,9 @@ body.ai-off #draft-action-btn {
   gap: 12px;
   border: 1px solid rgba(124, 58, 237, 0.18);
   border-radius: var(--border-radius);
-  padding: 14px;
-  background: rgba(124, 58, 237, 0.05);
+  padding: 16px;
+  background: linear-gradient(180deg, rgba(124, 58, 237, 0.08), rgba(124, 58, 237, 0.04));
+  box-shadow: var(--shadow);
 }
 
 .chat-panel__header {
@@ -88,6 +140,12 @@ body.ai-off #draft-action-btn {
   justify-content: space-between;
   gap: 12px;
   align-items: flex-start;
+}
+
+.agent-card-shell__header,
+.chat-panel__header {
+  border-bottom: 1px solid rgba(124, 58, 237, 0.12);
+  padding-bottom: 0.7rem;
 }
 
 .chat-panel__header h3 {
@@ -112,8 +170,8 @@ body.ai-off #draft-action-btn {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  min-height: 180px;
-  max-height: 340px;
+  min-height: 220px;
+  max-height: 420px;
   overflow: auto;
   padding-right: 4px;
 }
@@ -226,6 +284,8 @@ body.ai-off #draft-action-btn {
 .draft-action-btn {
   width: fit-content;
   padding: 0.55rem 0.9rem;
+  box-shadow: var(--shadow);
+  align-self: flex-start;
 }
 
 .chat-message--typing .chat-bubble::after {
@@ -346,6 +406,10 @@ body.ai-off #draft-action-btn {
 }
 
 @media (max-width: 768px) {
+  #agent-ai-shell {
+    grid-template-columns: 1fr;
+  }
+
   .chat-panel__header,
   .chat-form {
     flex-direction: column;

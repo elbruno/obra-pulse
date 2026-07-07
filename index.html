@@ -88,29 +88,47 @@
       <div id="agent-ai-shell">
         <div class="agent-switcher-note" id="ai-off-note">Datos por todos lados. ¿Por dónde empiezo?</div>
 
-        <div id="chat-panel" class="chat-panel" aria-label="Chat con ObraPulse">
-          <div class="chat-panel__header">
-            <div>
-              <h3>💬 Pregúntale a ObraPulse</h3>
-              <p>Consultá en lenguaje natural para priorizar decisiones.</p>
+        <div class="agent-column agent-column--left">
+          <div class="agent-card-shell">
+            <div class="agent-card-shell__header">
+              <h3>⚠️ Alertas del portafolio</h3>
+              <span>Lo urgente primero</span>
             </div>
-            <span class="chat-panel__status">⏺ analizando…</span>
+            <div id="agent-alerts-list" class="alerts-list alerts-list--compact"></div>
           </div>
 
-          <div id="chat-history" class="chat-history" aria-live="polite"></div>
-
-          <div id="chat-suggestions" class="chat-suggestions" aria-label="Preguntas sugeridas"></div>
-
-          <form id="chat-form" class="chat-form">
-            <input id="chat-input" type="text" placeholder="Escribí una pregunta..." aria-label="Escribir pregunta" />
-            <button type="submit">Enviar</button>
-          </form>
+          <div class="agent-card-shell agent-card-shell--soft">
+            <div class="agent-card-shell__header">
+              <h3>✨ Recomendaciones rápidas</h3>
+              <span>Lo siguiente a revisar</span>
+            </div>
+            <div id="recommendations-list" class="recommendations-list">
+              <!-- Populated by app.js -->
+            </div>
+          </div>
         </div>
 
-        <button id="draft-action-btn" class="draft-action-btn" type="button">Redacta un aviso para el equipo del Metro L3</button>
+        <div class="agent-column agent-column--right">
+          <div id="chat-panel" class="chat-panel" aria-label="Chat con ObraPulse">
+            <div class="chat-panel__header">
+              <div>
+                <h3>💬 Pregúntale a ObraPulse</h3>
+                <p>Consultá en lenguaje natural para priorizar decisiones.</p>
+              </div>
+              <span class="chat-panel__status">⏺ analizando…</span>
+            </div>
 
-        <div id="recommendations-list" class="recommendations-list">
-          <!-- Populated by app.js -->
+            <div id="chat-history" class="chat-history" aria-live="polite"></div>
+
+            <div id="chat-suggestions" class="chat-suggestions" aria-label="Preguntas sugeridas"></div>
+
+            <form id="chat-form" class="chat-form">
+              <input id="chat-input" type="text" placeholder="Escribí una pregunta..." aria-label="Escribir pregunta" />
+              <button type="submit">Enviar</button>
+            </form>
+          </div>
+
+          <button id="draft-action-btn" class="draft-action-btn" type="button">Redacta un aviso para el equipo del Metro L3</button>
         </div>
       </div>
     </section>

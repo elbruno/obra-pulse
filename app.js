@@ -121,8 +121,7 @@ function renderRecommendations(recomendaciones) {
 // ─────────────────────────────────────────────
 function renderAlerts(alertas) {
   const iconMap = { rfi: '📋', hse: '⚠️', cronograma: '🕐', costo: '💰' };
-  const list = document.getElementById('alerts-list');
-  list.innerHTML = alertas.map(a => {
+  const markup = alertas.map(a => {
     const icon = iconMap[a.tipo] || '🔔';
     return `
       <div class="alert-item alert-item--${a.tipo}">
@@ -130,6 +129,11 @@ function renderAlerts(alertas) {
         <p class="alert-text">${a.texto}</p>
       </div>`;
   }).join('');
+
+  const list = document.getElementById('alerts-list');
+  const agentList = document.getElementById('agent-alerts-list');
+  if (list) list.innerHTML = markup;
+  if (agentList) agentList.innerHTML = markup;
 }
 
 // ─────────────────────────────────────────────
