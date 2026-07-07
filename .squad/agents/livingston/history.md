@@ -1,0 +1,12 @@
+# Project Context
+
+- **Owner:** Bruno Capuano (Principal Cloud Advocate, Microsoft)
+- **Project:** ObraPulse — AI Construction Command Center. Static web dashboard (demo) para keynote en AI Construction Summit 2026, Lima, 9 de julio. La URL se comparte en vivo con la audiencia.
+- **Stack:** HTML5 + CSS moderno (variables CSS, grid/flex) + JavaScript vanilla + Chart.js (CDN). Sin frameworks. Sin backend. Sin build step. Despliega directamente en GitHub Pages desde `main` / raíz.
+- **PRD:** `docs/PRD.md` — los 9 criterios de aceptación (Definition of Done) están en la sección 8. Los datos mock exactos en la sección 6.
+- **Universe:** Ocean's Eleven
+- **Created:** 2026-07-07
+
+## Learnings
+
+<!-- Append new learnings below. Each entry is something lasting about the project. -->

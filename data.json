@@ -1,0 +1,44 @@
+{
+  "proyectos": [
+    { "id": "P-001", "proyecto": "Torre Miraflores", "tipo": "Residencial", "ubicacion": "Lima", "avance": 68, "rfis": 12, "ordenesCambio": 3, "incidentesHSE": 1, "atrasoDias": 8, "presupuesto": 71, "estado": "amarillo" },
+    { "id": "P-002", "proyecto": "Puente Rímac Norte", "tipo": "Vial", "ubicacion": "Lima", "avance": 45, "rfis": 21, "ordenesCambio": 5, "incidentesHSE": 2, "atrasoDias": 15, "presupuesto": 52, "estado": "rojo" },
+    { "id": "P-003", "proyecto": "Hospital Regional Arequipa", "tipo": "Salud", "ubicacion": "Arequipa", "avance": 82, "rfis": 7, "ordenesCambio": 1, "incidentesHSE": 0, "atrasoDias": -2, "presupuesto": 79, "estado": "verde" },
+    { "id": "P-004", "proyecto": "Ampliación Aeropuerto Cusco", "tipo": "Aeroportuario", "ubicacion": "Cusco", "avance": 33, "rfis": 18, "ordenesCambio": 4, "incidentesHSE": 1, "atrasoDias": 6, "presupuesto": 38, "estado": "amarillo" },
+    { "id": "P-005", "proyecto": "Centro Comercial San Isidro", "tipo": "Retail", "ubicacion": "Lima", "avance": 91, "rfis": 4, "ordenesCambio": 0, "incidentesHSE": 0, "atrasoDias": 0, "presupuesto": 88, "estado": "verde" },
+    { "id": "P-006", "proyecto": "Planta de Tratamiento Callao", "tipo": "Sanitario", "ubicacion": "Callao", "avance": 57, "rfis": 14, "ordenesCambio": 2, "incidentesHSE": 3, "atrasoDias": 11, "presupuesto": 61, "estado": "rojo" },
+    { "id": "P-007", "proyecto": "Autopista Sur — Tramo 4", "tipo": "Vial", "ubicacion": "Ica", "avance": 24, "rfis": 9, "ordenesCambio": 2, "incidentesHSE": 0, "atrasoDias": 3, "presupuesto": 27, "estado": "amarillo" },
+    { "id": "P-008", "proyecto": "Metro de Lima L3 — Est. Central", "tipo": "Transporte", "ubicacion": "Lima", "avance": 12, "rfis": 26, "ordenesCambio": 6, "incidentesHSE": 2, "atrasoDias": 19, "presupuesto": 15, "estado": "rojo" }
+  ],
+  "kpis": {
+    "proyectosActivos": 8,
+    "rfisAbiertos": 111,
+    "rfisAbiertostend": "+9",
+    "ordenesCambio": 23,
+    "incidentesHSE": 9,
+    "proyectosRiesgo": 3
+  },
+  "recomendaciones": [
+    { "prioridad": "alta",  "texto": "Priorizá Metro de Lima L3: 26 RFIs abiertos y +19 días de atraso — es el mayor riesgo de la cartera.", "proyecto": "Metro de Lima L3 — Est. Central" },
+    { "prioridad": "alta",  "texto": "Planta de Tratamiento Callao: 3 incidentes HSE este mes — revisar plan de seguridad antes de continuar.", "proyecto": "Planta de Tratamiento Callao" },
+    { "prioridad": "media", "texto": "5 RFIs en Torre Miraflores llevan >14 días sin respuesta — riesgo de bloqueo de frente de obra.", "proyecto": "Torre Miraflores" },
+    { "prioridad": "media", "texto": "Puente Rímac Norte consumió 52% del presupuesto con 45% de avance — vigilar desviación de costos.", "proyecto": "Puente Rímac Norte" }
+  ],
+  "alertas": [
+    { "tipo": "rfi",        "texto": "12 RFIs vencidos (>14 días) en 3 proyectos" },
+    { "tipo": "hse",        "texto": "Planta Callao: 2 incidentes HSE en las últimas 72 h" },
+    { "tipo": "cronograma", "texto": "Metro L3 sumó +4 días de atraso esta semana" },
+    { "tipo": "costo",      "texto": "Puente Rímac Norte: desviación de costo proyectada +9%" }
+  ],
+  "rfiActividad": {
+    "labels": ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"],
+    "abiertos":  [6, 9, 4, 11, 7, 3, 5],
+    "cerrados":  [3, 5, 6,  4, 8, 2, 6]
+  },
+  "topMovers": [
+    { "proyecto": "Metro de Lima L3",            "atrasoDias": 19 },
+    { "proyecto": "Puente Rímac Norte",           "atrasoDias": 15 },
+    { "proyecto": "Planta de Tratamiento Callao", "atrasoDias": 11 },
+    { "proyecto": "Torre Miraflores",             "atrasoDias": 8  },
+    { "proyecto": "Ampliación Aeropuerto Cusco",  "atrasoDias": 6  }
+  ]
+}

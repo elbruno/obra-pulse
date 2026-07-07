@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ObraPulse — AI Construction Command Center</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+</head>
+<body>
+
+  <!-- =========================================================
+       HEADER
+  ========================================================== -->
+  <header id="main-header">
+    <div class="header-brand">
+      <h1 class="header-title">🏗️ ObraPulse</h1>
+      <p class="header-subtitle">AI Construction Command Center</p>
+    </div>
+
+    <div class="header-meta">
+      <span class="header-badge">Datos de demostración · AI Construction Summit 2026</span>
+      <span class="header-updated">Última actualización: hace 4 min</span>
+    </div>
+
+    <div class="header-controls">
+      <button id="theme-toggle" class="btn-icon" aria-label="Cambiar tema">🌙</button>
+      <input
+        id="search-input"
+        type="search"
+        class="search-input"
+        placeholder="Buscar proyecto…"
+        aria-label="Buscar proyecto"
+      />
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <!-- =========================================================
+         KPI ROW
+    ========================================================== -->
+    <section id="kpis" aria-label="Indicadores clave">
+      <div class="kpi-card">
+        <span class="kpi-value" data-target="8">0</span>
+        <span class="kpi-label">Proyectos activos</span>
+        <span class="kpi-trend kpi-trend--neutral"></span>
+      </div>
+
+      <div class="kpi-card">
+        <span class="kpi-value" data-target="111">0</span>
+        <span class="kpi-label">RFIs abiertos</span>
+        <span class="kpi-trend kpi-trend--up">▲ +9 esta semana</span>
+      </div>
+
+      <div class="kpi-card">
+        <span class="kpi-value" data-target="23">0</span>
+        <span class="kpi-label">Órdenes de cambio pendientes</span>
+        <span class="kpi-trend kpi-trend--neutral"></span>
+      </div>
+
+      <div class="kpi-card">
+        <span class="kpi-value" data-target="9">0</span>
+        <span class="kpi-label">Incidentes HSE (mes)</span>
+        <span class="kpi-trend kpi-trend--neutral"></span>
+      </div>
+
+      <div class="kpi-card kpi-card--danger">
+        <span class="kpi-value" data-target="3">0</span>
+        <span class="kpi-label">Proyectos en riesgo</span>
+        <span class="kpi-trend kpi-trend--down">▼ requieren atención</span>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         AI RECOMMENDATIONS PANEL
+    ========================================================== -->
+    <section id="agent-recommendations" aria-label="Recomendaciones del agente">
+      <div class="section-header">
+        <h2 class="section-title">🤖 Recomendaciones del agente</h2>
+        <span class="section-badge section-badge--ai">AI powered</span>
+      </div>
+      <div id="recommendations-list" class="recommendations-list">
+        <!-- Populated by app.js -->
+      </div>
+    </section>
+
+    <!-- =========================================================
+         CHARTS ROW
+    ========================================================== -->
+    <section id="charts" aria-label="Gráficos de portafolio">
+      <div class="chart-card">
+        <h3 class="chart-title">Actividad de RFIs — últimos 7 días</h3>
+        <canvas id="chart-rfi-activity" role="img" aria-label="Gráfico de actividad de RFIs"></canvas>
+      </div>
+
+      <div class="chart-card">
+        <h3 class="chart-title">Top movers — atraso de cronograma</h3>
+        <canvas id="chart-top-movers" role="img" aria-label="Gráfico de proyectos con mayor atraso"></canvas>
+      </div>
+
+      <div class="chart-card">
+        <h3 class="chart-title">Estado del portafolio</h3>
+        <canvas id="chart-portfolio" role="img" aria-label="Gráfico de estado del portafolio"></canvas>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         PROJECTS TABLE
+    ========================================================== -->
+    <section id="projects-section" aria-label="Tabla de proyectos">
+      <div class="section-header">
+        <h2 class="section-title">Proyectos</h2>
+
+        <div class="filter-controls" role="group" aria-label="Filtros de proyectos">
+          <select id="filter-estado" class="filter-select" aria-label="Filtrar por estado">
+            <option value="">Todos los estados</option>
+            <option value="verde">🟢 Verde</option>
+            <option value="amarillo">🟡 Amarillo</option>
+            <option value="rojo">🔴 Rojo</option>
+          </select>
+
+          <select id="filter-tipo" class="filter-select" aria-label="Filtrar por tipo">
+            <option value="">Todos los tipos</option>
+            <option value="Residencial">Residencial</option>
+            <option value="Vial">Vial</option>
+            <option value="Salud">Salud</option>
+            <option value="Aeroportuario">Aeroportuario</option>
+            <option value="Retail">Retail</option>
+            <option value="Sanitario">Sanitario</option>
+            <option value="Transporte">Transporte</option>
+          </select>
+
+          <select id="filter-ubicacion" class="filter-select" aria-label="Filtrar por ubicación">
+            <option value="">Todas las ubicaciones</option>
+            <option value="Lima">Lima</option>
+            <option value="Arequipa">Arequipa</option>
+            <option value="Cusco">Cusco</option>
+            <option value="Callao">Callao</option>
+            <option value="Ica">Ica</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table id="projects-table" aria-label="Listado de proyectos">
+          <thead>
+            <tr>
+              <th class="sortable" data-column="proyecto">Proyecto</th>
+              <th class="sortable" data-column="tipo">Tipo</th>
+              <th class="sortable" data-column="ubicacion">Ubicación</th>
+              <th class="sortable" data-column="avance">Avance %</th>
+              <th class="sortable" data-column="rfis">RFIs abiertos</th>
+              <th class="sortable" data-column="ordenesCambio">Órd. cambio</th>
+              <th class="sortable" data-column="incidentesHSE">Incidentes HSE</th>
+              <th class="sortable" data-column="atrasoDias">Atraso (días)</th>
+              <th class="sortable" data-column="presupuesto">Presupuesto %</th>
+              <th class="sortable" data-column="estado">Estado</th>
+            </tr>
+          </thead>
+          <tbody id="projects-tbody">
+            <!-- Populated by app.js -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         ALERTS PANEL
+    ========================================================== -->
+    <section id="alerts" aria-label="Panel de alertas">
+      <div class="section-header">
+        <h2 class="section-title">⚠️ Alertas</h2>
+      </div>
+      <div id="alerts-list" class="alerts-list">
+        <!-- Populated by app.js -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================
+       FOOTER
+  ========================================================== -->
+  <footer id="main-footer">
+    <p class="footer-credits">Demo construida con GitHub Copilot · Bruno Capuano · @elbruno</p>
+    <p class="footer-disclaimer">Datos ficticios con fines ilustrativos</p>
+  </footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
